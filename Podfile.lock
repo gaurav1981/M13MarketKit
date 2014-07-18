@@ -1,0 +1,13 @@
+PODS:
+  - M13ProgressSuite (1.2.3)
+  - OpenSSL (1.0.1)
+
+DEPENDENCIES:
+  - M13ProgressSuite
+  - OpenSSL
+
+SPEC CHECKSUMS:
+  M13ProgressSuite: c7e62c60468b021f12558f5797b9d280e642d5a6
+  OpenSSL: 59f42fe6ca33b17cd407ae688ef57b763741c116
+
+COCOAPODS: 0.33.1
