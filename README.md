@@ -93,6 +93,24 @@ Sample Product List
 ]
 ```
 
+Known Issues:
+--------------
+
+I can't seem to get cocoapods to work. ```pod spec lint``` keeps failing due to the following error:
+
+```
+ -> M13MarketKit (1.0.0)
+    - ERROR | [iOS] [xcodebuild]  M13MarketKit/M13MarketKit/MKMarket.m:19:9: fatal error: 'SSZipArchive/SSZipArchive.h' file not found
+    - ERROR | [iOS] [xcodebuild]  M13MarketKit/M13MarketKit/MKReceiptValidator.m:21:9: fatal error: 'OpenSSL/pkcs7.h' file not found
+    - ERROR | [iOS] [xcodebuild]  M13MarketKit/M13MarketKit/MKStoreFrontCell.m:19:9: fatal error: 'M13ProgressSuite/M13ProgressViewBar.h' file not found
+
+Analyzed 1 podspec.
+
+[!] The spec did not pass validation.
+```
+
+Any help fixing this issue would be greatly appreciated.
+
 Contact Me:
 -------------
 If you have any questions comments or suggestions, send me a message. If you find a bug, or want to submit a pull request, let me know.
