@@ -93,6 +93,39 @@ Sample Product List
 ]
 ```
 
+CocoaPods
+----------
+
+I'm having significant trouble getting cocoapods to work. I can't get ```pod spec lint`` to succeed. What's strange is Xcode builds the project just fine, and this doesn't. 
+
+Attempts:
+
+* Clearing the Podfile.lock, Pods folder, and the workspace, then reinstalling.
+* Adding ```$(inherited)``` to the header search paths.
+* Editing the #import statements to four diffrent styles: "#import <Pod/file.h>", "#import <file.h>... and the same thing with quotes instead of <>.
+
+
+```
+***:M13MarketKit Brandon$ pod spec lint
+
+ -> M13MarketKit (1.0.3)
+    - ERROR | [iOS] [xcodebuild]  M13MarketKit/M13MarketKit/MKMarket.m:19:9: fatal error: 'zipzap/zipzap.h' file not found
+
+Analyzed 1 podspec.
+
+[!] The spec did not pass validation.
+***:M13MarketKit Brandon$ pod spec lint
+
+ -> M13MarketKit (1.0.4)
+    - ERROR | [iOS] [xcodebuild]  M13MarketKit/M13MarketKit/MKMarket.m:19:9: fatal error: 'zipzap/zipzap.h' file not found
+    - ERROR | [iOS] [xcodebuild]  M13MarketKit/M13MarketKit/MKReceiptValidator.m:21:9: fatal error: 'OpenSSL/pkcs7.h' file not found
+    - ERROR | [iOS] [xcodebuild]  M13MarketKit/M13MarketKit/MKStoreFrontCell.m:19:9: fatal error: 'M13ProgressSuite/M13ProgressViewBar.h' file not found
+
+Analyzed 1 podspec.
+
+[!] The spec did not pass validation.
+```
+
 Contact Me:
 -------------
 If you have any questions comments or suggestions, send me a message. If you find a bug, or want to submit a pull request, let me know.
