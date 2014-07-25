@@ -74,7 +74,7 @@
 
 - (void)reloadTable
 {
-    NSLog(@"Purchaseable: %i, Purchased: %i", [MKMarket sharedMarket].purchasableProducts.allValues.count, [MKMarket sharedMarket].purchasedProducts.allValues.count);
+    NSLog(@"Purchaseable: %lu, Purchased: %lu", (unsigned long)[MKMarket sharedMarket].purchasableProducts.allValues.count, (unsigned long)[MKMarket sharedMarket].purchasedProducts.allValues.count);
     _products = [MKMarket sharedMarket].purchasableProducts.allValues;
     _products = [_products sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"skProduct.localizedTitle" ascending:YES]]];
 

@@ -47,6 +47,8 @@
     UIColor *_currentColor;
 }
 
+@dynamic progress;
+
 #pragma mark Initalization and setup
 
 - (id)init
@@ -165,12 +167,14 @@
 - (void)setStripeWidth:(CGFloat)stripeWidth
 {
     _stripeWidth = stripeWidth;
+    [self invalidateIntrinsicContentSize];
     [self setNeedsDisplay];
 }
 
 - (void)setBorderWidth:(CGFloat)borderWidth
 {
     _borderWidth = borderWidth;
+    [self invalidateIntrinsicContentSize];
     [self setNeedsDisplay];
 }
 
@@ -278,6 +282,15 @@
     [self setAnimateStripes:YES];
     [self calculateMask];
     [self drawStripes];
+}
+
+- (CGSize)intrinsicContentSize
+{
+    //Border + border to progress bar margin.
+    CGFloat base = (_borderWidth * 2) + (_borderWidth * 2) + 1;
+    //Add some stripes so we can see them.
+    CGFloat width = base + (2 * _stripeWidth);
+    return CGSizeMake(width, base);
 }
 
 #pragma mark Drawing

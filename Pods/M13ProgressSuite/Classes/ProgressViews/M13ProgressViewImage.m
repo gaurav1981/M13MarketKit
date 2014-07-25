@@ -32,6 +32,8 @@
 
 @implementation M13ProgressViewImage
 
+@dynamic progress;
+
 #pragma mark Initalization and setup
 
 - (id)init
@@ -166,6 +168,11 @@
 {
     [super layoutSubviews];
     _progressView.frame = self.bounds;
+}
+
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(UIViewNoIntrinsicMetric, UIViewNoIntrinsicMetric);
 }
 
 #pragma mark Drawing

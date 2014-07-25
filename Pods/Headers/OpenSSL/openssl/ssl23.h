@@ -1,1 +1,1 @@
-../../../OpenSSL/include/openssl/ssl23.h
+../../../OpenSSL/ssl/ssl23.h

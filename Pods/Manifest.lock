@@ -1,13 +1,16 @@
 PODS:
-  - M13ProgressSuite (1.2.3)
-  - OpenSSL (1.0.1)
+  - M13ProgressSuite (1.2.5)
+  - OpenSSL (1.0.108)
+  - zipzap (7.0)
 
 DEPENDENCIES:
   - M13ProgressSuite
   - OpenSSL
+  - zipzap
 
 SPEC CHECKSUMS:
-  M13ProgressSuite: c7e62c60468b021f12558f5797b9d280e642d5a6
-  OpenSSL: 59f42fe6ca33b17cd407ae688ef57b763741c116
+  M13ProgressSuite: bf63f5592f1e40767da5203199804ad5eed3eb48
+  OpenSSL: 62c06e5ec449a28e41c7b225c96193dc5b20800c
+  zipzap: 1c85484d8f89388fba8fb5824b2eae15b9ce8092
 
 COCOAPODS: 0.33.1

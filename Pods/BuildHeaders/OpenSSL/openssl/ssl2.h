@@ -1,1 +1,1 @@
-../../../OpenSSL/include/openssl/ssl2.h
+../../../OpenSSL/ssl/ssl2.h

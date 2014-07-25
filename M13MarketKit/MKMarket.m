@@ -16,7 +16,7 @@
 #import "MKMarket.h"
 #import "MKProduct.h"
 #import "MKReceiptValidator.h"
-#import <SSZipArchive/SSZipArchive.h>
+#import <zipzap.h>
 #import <objc/runtime.h>
 #import <StoreKit/StoreKit.h>
 
@@ -129,7 +129,9 @@
         _productListData = nil;
         _loadingProductList = NO;
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to load products list: %@", error.localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [alert show];
+        });
         [[NSNotificationCenter defaultCenter] postNotificationName:kMKMarketProductListUpdateFinishedNoification object:nil];
     }
 }
@@ -145,7 +147,9 @@
     if (error) {
         _loadingProductList = NO;
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to load products list: %@", error.localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [alert show];
+        });
         [[NSNotificationCenter defaultCenter] postNotificationName:kMKMarketProductListUpdateFinishedNoification object:nil];
         return;
     }
@@ -153,7 +157,9 @@
     if (!productDictionaries) {
         _loadingProductList = NO;
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to load products list: No list to load." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [alert show];
+        });
         [[NSNotificationCenter defaultCenter] postNotificationName:kMKMarketProductListUpdateFinishedNoification object:nil];
         return;
     }
@@ -190,7 +196,9 @@
     _productsRequest = nil;
     _loadingProductList = NO;
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to load products list: %@", error.localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [alert show];
+    });
     [[NSNotificationCenter defaultCenter] postNotificationName:kMKMarketProductListUpdateFinishedNoification object:nil];
 }
 
@@ -364,7 +372,9 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:kMKMarketCompletedRestoringTransactionsNotification object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kMKMarketProductListChangedNotification object:nil];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to restore tranactions: %@", error.localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [alert show];
+    });
 }
 
 - (void)completeTransaction:(SKPaymentTransaction *)transaction forProduct:(MKProduct *)product
@@ -389,7 +399,9 @@
             //failure
             NSLog(@"Transaction for product: %@ failed to validate receipt.", product.identifier);
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to find receipt for product: %@", product.skProduct.localizedTitle] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [alert show];
+            });
             //Finish the failed transaction.
             [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
             product.purchaseInProgress = NO;
@@ -403,7 +415,9 @@
 {
     NSLog(@"Transaction for product: %@ failed: %@", product.identifier, transaction.error.localizedDescription);
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to process transaction for %@: %@", product.skProduct.localizedTitle, transaction.error.localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [alert show];
+    });
     //Finish the failed transaction.
     [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 }
@@ -575,7 +589,9 @@
     if (error) {
         NSLog(@"Unable to create temporary storage directory: %@", error.localizedDescription);
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Unable to create temporary storage directory: %@", error.localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [alert show];
+        });
         return;
     }
     
@@ -591,7 +607,9 @@
     if (!copied || error) {
         NSLog(@"Unable to copy download: %@", error.localizedDescription);
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Unable to copy download: %@", error.localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [alert show];
+        });
         return;
     }
     
@@ -633,7 +651,9 @@
         product.instalationProgress = 0.0;
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Unable to download %@. %@", product.skProduct.localizedTitle, error.localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [alert show];
+        });
     }
 }
 
@@ -708,9 +728,32 @@
         if ([path.pathExtension.uppercaseString isEqualToString:@"ZIP"]) {
             //Unzip the file to the location
             NSLog(@"Decompressing to: %@", installPath);
-            BOOL unzipped = [SSZipArchive unzipFileAtPath:path toDestination:installPath overwrite:YES password:nil error:&error];
             
-            if (unzipped && !error) {
+            NSFileManager* fileManager = [NSFileManager defaultManager];
+            NSURL* pathURL = [NSURL fileURLWithPath:installPath];
+            ZZArchive* archive = [ZZArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:path]];
+            for (ZZArchiveEntry* entry in archive.entries)
+            {
+                NSURL* targetPath = [pathURL URLByAppendingPathComponent:entry.fileName];
+                
+                if (entry.fileMode & S_IFDIR) {
+                    // check if directory bit is set
+                    [fileManager createDirectoryAtURL:targetPath withIntermediateDirectories:YES attributes:nil error:nil];
+                } else {
+                    // Some archives don't have a separate entry for each directory and just
+                    // include the directory's name in the filename. Make sure that directory exists
+                    // before writing a file into it.
+                    [fileManager createDirectoryAtURL:[targetPath URLByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+                    
+                    [[entry newDataWithError:&error] writeToURL:targetPath atomically:NO];
+                    
+                    if (error) {
+                        NSLog(@"Error creating file: %@", error);
+                    }
+                }
+            }
+            
+            if (!error) {
                 [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
             }
         } else {
@@ -722,7 +765,9 @@
             //Failure
             NSLog(@"Failed to install: %@: %@", product.identifier, error.localizedDescription);
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to install %@: %@", product.skProduct.localizedTitle, error.localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [alert show];
+            });
         }
         //Finish the failed transaction.
         if (transaction) {
@@ -738,7 +783,9 @@
         //Something is wrong. No file to install
         NSLog(@"Failed to install %@: No content to install.", product.identifier);
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to install %@: No content to install.", product.skProduct.localizedTitle] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [alert show];
+        });
         //Finish the failed transaction.
         if (transaction) {
             [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -757,7 +804,9 @@
     NSLog(@"SKDownload for product %@ failed: %@", download.transaction.payment.productIdentifier, download.error.localizedDescription);
     MKProduct *product = _products[download.transaction.payment.productIdentifier];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to download content for %@: %@", product.skProduct.localizedTitle, download.error.localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [alert show];
+    });
     //Finish the failed transaction.
     [[SKPaymentQueue defaultQueue] finishTransaction:download.transaction];
     product.purchaseInProgress = NO;

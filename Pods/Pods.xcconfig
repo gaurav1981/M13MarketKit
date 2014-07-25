@@ -1,6 +1,7 @@
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/M13ProgressSuite" "${PODS_ROOT}/Headers/OpenSSL" "${PODS_ROOT}/Headers/OpenSSL/openssl"
-LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/OpenSSL/lib"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/M13ProgressSuite" -isystem "${PODS_ROOT}/Headers/OpenSSL" -isystem "${PODS_ROOT}/Headers/OpenSSL/openssl"
-OTHER_LDFLAGS = -ObjC -lcrypto -lssl -framework Accelerate -framework CoreGraphics -framework CoreImage -framework Foundation -framework QuartzCore -framework UIKit
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/M13ProgressSuite" "${PODS_ROOT}/Headers/OpenSSL" "${PODS_ROOT}/Headers/OpenSSL/openssl" "${PODS_ROOT}/Headers/zipzap"
+LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/OpenSSL/lib" "$(PODS_ROOT)/OpenSSL/lib"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/M13ProgressSuite" -isystem "${PODS_ROOT}/Headers/OpenSSL" -isystem "${PODS_ROOT}/Headers/OpenSSL/openssl" -isystem "${PODS_ROOT}/Headers/zipzap"
+OTHER_CPLUSPLUSFLAGS = -std=gnu++11 -stdlib=libc++
+OTHER_LDFLAGS = -ObjC -lc++ -lcrypto -lssl -lz -framework Accelerate -framework CoreGraphics -framework CoreImage -framework Foundation -framework QuartzCore -framework UIKit
 PODS_ROOT = ${SRCROOT}/Pods
