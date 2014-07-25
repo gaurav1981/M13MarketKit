@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "M13MarketKit"
-  s.version      = "1.0.3"
+  s.version      = "1.0.4"
   s.summary      = "M13MarketKit is a complete backend for handling in app purchases. It also includes a basic storefront as an example, or for use."
 
   s.description  = <<-DESC
@@ -27,7 +27,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
   s.platform     = :ios, '8.0'
 
-  s.source = { :git => "https://github.com/Marxon13/M13MarketKit.git", :tag => "v1.0.3"}
+  s.source = { :git => "https://github.com/Marxon13/M13MarketKit.git", :tag => "v1.0.4"}
 
   s.source_files  = 'M13MarketKit/*'
 
