@@ -16,7 +16,7 @@
 #import "MKMarket.h"
 #import "MKProduct.h"
 #import "MKReceiptValidator.h"
-#import <zipzap.h>
+#import <zipzap/zipzap.h>
 #import <objc/runtime.h>
 #import <StoreKit/StoreKit.h>
 
