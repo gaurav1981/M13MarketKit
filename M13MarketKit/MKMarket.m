@@ -738,12 +738,20 @@
                 
                 if (entry.fileMode & S_IFDIR) {
                     // check if directory bit is set
-                    [fileManager createDirectoryAtURL:targetPath withIntermediateDirectories:YES attributes:nil error:nil];
+                    NSError *dirError;
+                    [fileManager createDirectoryAtURL:targetPath withIntermediateDirectories:YES attributes:nil error:&dirError];
+                    if (dirError) {
+                        NSLog(@"Failed to create directory.");
+                    }
                 } else {
                     // Some archives don't have a separate entry for each directory and just
                     // include the directory's name in the filename. Make sure that directory exists
                     // before writing a file into it.
-                    [fileManager createDirectoryAtURL:[targetPath URLByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+                    NSError *dirError;
+                    [fileManager createDirectoryAtURL:[targetPath URLByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&dirError];
+                    if (dirError) {
+                        NSLog(@"Failed to create directory.");
+                    }
                     
                     [[entry newDataWithError:&error] writeToURL:targetPath atomically:NO];
                     

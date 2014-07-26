@@ -137,6 +137,10 @@
         return MKProductStateAvailableToPurchase;
     }
     
+    if (_availableForPurchase && _skProduct && (_type == MKProductTypeConsumable || _type == MKProductTypeNonRenewableSubscription)) {
+        return MKProductStateAvailableToPurchase;
+    }
+    
     //Was the purchased canceled by apple?
     if (_receipt.cancelationDate) {
         if ([[NSDate date] compare:_receipt.cancelationDate] == NSOrderedDescending) {
