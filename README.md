@@ -27,7 +27,7 @@ Setup:
     market.productInformationFileURL = [NSURL urlWithString:@"http://www.website.com/StoreList.json"];
     ```
     
-3. Add the four delegate methods to your project. 
+3. Add the four delegate methods to your project. Try to add them to a class that will always exists, like the root view that will be presenting the store.
 	
 	```
 	 - (BOOL)productInstalled:(MKProduct *)product
